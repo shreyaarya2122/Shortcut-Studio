@@ -9,75 +9,143 @@ const themeBtn = document.querySelector("[data-theme-toggle]");
 let lastPayload = null;
 let generationRound = 0;
 
-const angles = [
+const frameworkLibrary = [
   {
-    name: "Curiosity gap",
-    label: "Shock opener",
+    name: "Mistake reversal",
+    label: "Stop doing this",
+    angle: "Show the common mistake, then flip it into a better method.",
     hooks: [
-      (t) => `Everyone thinks ${t} is obvious. The weird part is what happens right before it works.`,
-      (t) => `The fastest way to understand ${t} is to look at the mistake almost everyone repeats.`,
-      (t) => `If ${t} feels confusing, this one hidden pattern explains why.`,
+      (t) => `Stop using ${t} like this. You are making the result harder than it needs to be.`,
+      (t) => `Most people fail with ${t} because they start in the wrong place.`,
+      (t) => `If ${t} is not working for you, this is probably the mistake.`,
     ],
-    prompts: [
-      "Comment the moment you realized this was true.",
-      "Which part surprised you most: the setup or the payoff?",
-      "Drop one example where you have seen this happen.",
+    close: [
+      "Comment “fix” if you want the checklist version.",
+      "Which mistake have you seen most often?",
+      "Save this before you try it again.",
     ],
   },
   {
-    name: "Mini story",
-    label: "Story loop",
+    name: "Myth vs truth",
+    label: "Myth breaker",
+    angle: "Challenge a belief, prove the better answer, then give a simple takeaway.",
     hooks: [
-      (t) => `I tested ${t} like a creator would, and the first result made no sense.`,
-      (t) => `Someone tried ${t} the wrong way first, and that is what made the lesson obvious.`,
-      (t) => `This started as a simple test about ${t}, then the result flipped the whole idea.`,
+      (t) => `The biggest myth about ${t} is that you need more time. You need a cleaner structure.`,
+      (t) => `People explain ${t} like it is complicated. It is usually just badly organized.`,
+      (t) => `You have probably heard this advice about ${t}. It is only half true.`,
     ],
-    prompts: [
-      "Would you try this or skip it? Answer in one word.",
-      "Comment “part 2” if you want the full breakdown.",
-      "Tell me what you would test next.",
+    close: [
+      "Comment “myth” if this changed how you see it.",
+      "What is another myth I should break next?",
+      "Send this to someone still doing it the old way.",
     ],
   },
   {
-    name: "Teach fast",
-    label: "Lesson sprint",
+    name: "3-step shortcut",
+    label: "Fast framework",
+    angle: "Give viewers a repeatable three-step process they can use immediately.",
     hooks: [
-      (t) => `Here is the 60-second version of ${t} that most people explain backwards.`,
-      (t) => `You do not need a long tutorial for ${t}. You need these three beats.`,
-      (t) => `Steal this simple framework for ${t} before you overcomplicate it.`,
+      (t) => `Here is a three-step shortcut for ${t} that you can use today.`,
+      (t) => `If I had 60 seconds to explain ${t}, I would use this framework.`,
+      (t) => `Do ${t} in this order: spot it, shape it, ship it.`,
     ],
-    prompts: [
-      "Save this and tell me which step needs a deeper breakdown.",
-      "Which step would you use first?",
-      "Share this with someone who needs the shortcut version.",
+    close: [
+      "Save this and try the three steps today.",
+      "Which step should I turn into a full video?",
+      "Comment the topic you want me to simplify next.",
+    ],
+  },
+  {
+    name: "Story reveal",
+    label: "Mini story",
+    angle: "Open with a tiny story, reveal the lesson, then turn it into advice.",
+    hooks: [
+      (t) => `A creator tried ${t} the hard way for weeks. The fix took less than a minute.`,
+      (t) => `This ${t} example looks normal at first, but the result comes from one hidden choice.`,
+      (t) => `I saw someone change one thing about ${t}, and the whole outcome improved.`,
+    ],
+    close: [
+      "Would you test this approach? Yes or no?",
+      "Comment “story” if you want more examples like this.",
+      "What would you change first?",
+    ],
+  },
+  {
+    name: "Contrarian take",
+    label: "Hot take",
+    angle: "Say the unexpected thing, defend it, and make viewers respond.",
+    hooks: [
+      (t) => `Hot take: ${t} is not about doing more. It is about removing the weak part.`,
+      (t) => `The advice everyone gives about ${t} sounds helpful, but it can slow you down.`,
+      (t) => `You do not need to master ${t}. You need to stop doing the part that kills momentum.`,
+    ],
+    close: [
+      "Agree or disagree? Tell me why.",
+      "Comment the part you would remove first.",
+      "Share this with someone who loves overcomplicating it.",
+    ],
+  },
+  {
+    name: "Before and after",
+    label: "Transformation",
+    angle: "Show a weak version, improve it, then explain the difference.",
+    hooks: [
+      (t) => `Here is the weak version of ${t}, and here is the version that actually holds attention.`,
+      (t) => `Watch how one small change makes ${t} feel ten times clearer.`,
+      (t) => `This is the before-and-after test I would run for ${t}.`,
+    ],
+    close: [
+      "Comment “before” if you want me to review an example.",
+      "Which version would you keep watching?",
+      "Save this as a quick editing checklist.",
     ],
   },
 ];
 
-const toneMap = {
-  curious: ["Wait for the twist", "Here is the part nobody mentions", "The payoff is smaller than you expect, but more useful"],
-  dramatic: ["This changes the whole frame", "That is the trap", "Now the reveal"],
-  funny: ["Tiny chaos, useful lesson", "This sounds fake, stay with me", "And yes, people still do this"],
-  coach: ["Use this structure", "Notice the transition", "Steal this for your next video"],
+const toneLines = {
+  curious: ["Here is the interesting part", "Notice what changed", "That is the hidden lever"],
+  dramatic: ["This is where most people lose the viewer", "Now the switch happens", "That one choice changes the outcome"],
+  funny: ["This is the tiny chaos moment", "The internet loves making this harder", "Painful, but useful"],
+  coach: ["Use this exact structure", "Do not skip this step", "Steal this for your next video"],
 };
 
-const styleTips = {
-  education: [
-    "Use captions as chapter titles, not subtitles only.",
-    "Show a quick before/after visual by second 8.",
-    "Cut to proof every time a claim gets abstract.",
-  ],
-  entertainment: [
-    "Open with motion already happening, then explain after the cut.",
-    "Use reaction zooms on the contradiction and payoff.",
-    "Let one line feel quotable enough for comments.",
-  ],
-  hybrid: [
-    "Package the lesson like a reveal, not a lecture.",
-    "Alternate face-to-camera with visual receipts every 2-3 seconds.",
-    "End on a debate prompt instead of a generic follow request.",
-  ],
+const categoryMoves = {
+  education: {
+    proof: "Show a simple example, screen recording, diagram, or side-by-side comparison.",
+    value: "Make the viewer leave with one repeatable rule.",
+    visual: "Use chapter-style captions: Mistake, Fix, Example, Result.",
+  },
+  entertainment: {
+    proof: "Use a reaction shot, clip-style cutaway, or quick visual contrast.",
+    value: "Make the viewer feel a twist, reveal, or opinion they want to debate.",
+    visual: "Use zooms, pauses, and punch-in captions on the strongest lines.",
+  },
+  hybrid: {
+    proof: "Pair a useful explanation with a reveal-style edit or quick example.",
+    value: "Teach one idea, but package it like a discovery.",
+    visual: "Alternate face-to-camera, b-roll, and big captions every 2-3 seconds.",
+  },
 };
+
+const retentionTactics = [
+  "Start with the result or mistake before any intro.",
+  "Put the most clickable phrase on screen in the first second.",
+  "Change visual format whenever the script changes purpose.",
+  "Use one open loop before second 5 and close it after second 35.",
+  "Cut filler words from the voiceover before editing the video.",
+  "End with a specific question, not a generic follow request.",
+  "Show a before/after or example before explaining the theory.",
+  "Make the final frame readable long enough for screenshots.",
+];
+
+const textTemplates = [
+  (t) => `${t}: the part people skip`,
+  (t) => `Stop doing ${t} this way`,
+  (t) => `3 steps for ${t}`,
+  (t) => `The ${t} mistake`,
+  (t) => `Before vs after: ${t}`,
+  (t) => `Steal this ${t} framework`,
+];
 
 function cleanTopic(value) {
   return value.trim().replace(/\s+/g, " ");
@@ -94,46 +162,61 @@ function getPayload() {
 }
 
 function paceLine(pace) {
-  if (pace === "story") return "Hold shots for 3-4 seconds during story beats, then quick-cut the payoff.";
-  if (pace === "balanced") return "Alternate 3-second explanation beats with 1-second visual resets.";
-  return "Cut every 1.5-2.5 seconds; use zooms, captions, and b-roll as pattern interrupts.";
+  if (pace === "story") return "Hold the story beats for 3-4 seconds, then quick-cut the reveal and takeaway.";
+  if (pace === "balanced") return "Use 2-3 second shots: hook, example, explanation, proof, payoff.";
+  return "Use fast cuts every 1.5-2 seconds with captions, zooms, and b-roll resets.";
+}
+
+function shuffle(items) {
+  return [...items].sort(() => Math.random() - 0.5);
 }
 
 function pick(items, offset = 0) {
-  return items[(generationRound + offset) % items.length];
+  return items[(generationRound + offset + Math.floor(Math.random() * items.length)) % items.length];
 }
 
-function buildScript(payload, angle, index) {
-  const t = payload.topic;
-  const toneLines = toneMap[payload.tone];
-  const tips = [...styleTips[payload.category]];
-  const hook = pick(angle.hooks, index - 1)(t);
-  const prompt = pick(angle.prompts, index - 1);
-  const rotatedTips = tips.slice((generationRound + index - 1) % tips.length).concat(tips.slice(0, (generationRound + index - 1) % tips.length));
+function buildFrameworkSet() {
+  return shuffle(frameworkLibrary).slice(0, 3);
+}
+
+function buildScript(payload, framework, index) {
+  const topic = payload.topic;
+  const moves = categoryMoves[payload.category];
+  const tone = toneLines[payload.tone];
+  const hook = pick(framework.hooks, index)(topic);
+  const prompt = pick(framework.close, index);
+  const screenText = pick(textTemplates, index)(topic);
+  const tacticSet = shuffle(retentionTactics).slice(0, 3);
+  const toneA = pick(tone, index);
+  const toneB = pick(tone, index + 1);
+
   return {
-    title: `${angle.label}: ${t}`,
-    angle: angle.name,
+    title: `${framework.label}: ${topic}`,
+    angle: framework.name,
     hook,
     beats: [
-      `0-3s: Hook: "${hook}" Put the key phrase as large on-screen text.`,
-      `4-10s: Context: Tell ${payload.audience} why this matters today. Use a fast visual example before explaining it.`,
-      `11-23s: Build the loop: "${pick(toneLines, index - 1)}." Show one surprising detail, mistake, or contrast.`,
-      `24-38s: Payoff setup: "${pick(toneLines, index)}." Add a jump cut, screen recording, or prop demonstration.`,
-      `39-52s: Payoff: Give the practical takeaway in one sentence, then show the result visually.`,
-      `53-60s: Engagement close: "${prompt}" Keep the last frame readable for at least one second.`,
+      `0-3s: Say: "${hook}" Show movement immediately. On-screen text: "${screenText}".`,
+      `4-9s: Name the audience problem: "${payload.audience} usually lose time here because the first step is unclear."`,
+      `10-18s: Set the loop: "${toneA}." Show the weak version, wrong assumption, or confusing example.`,
+      `19-31s: Give proof: ${moves.proof} Keep each visual under three seconds.`,
+      `32-44s: Deliver the useful method: explain the one rule, three steps, or before/after change viewers can copy.`,
+      `45-54s: Payoff: "${toneB}." Show the improved result or the clearer version on screen.`,
+      `55-60s: Engagement close: "${prompt}" Hold the final caption so viewers can read it.`,
     ],
     onScreen: [
-      `Big text: "${t}: the part people miss"`,
-      `Mid-video caption: "${pick(toneLines, index + 1)}"`,
-      `Final card: "${prompt}"`,
+      screenText,
+      `Watch the change`,
+      `Mistake → Fix → Result`,
+      prompt,
     ],
     cta: prompt,
-    tips: [paceLine(payload.pace), ...rotatedTips],
-    retention: [
-      "Start mid-action instead of with an intro.",
-      "Use an open loop in the hook and resolve it after the halfway mark.",
-      "Change framing, crop, or visual evidence whenever the sentence changes purpose.",
+    tips: [
+      paceLine(payload.pace),
+      moves.visual,
+      moves.value,
+      framework.angle,
     ],
+    retention: tacticSet,
     index,
   };
 }
@@ -161,15 +244,16 @@ Retention tactics:
 ${script.retention.map((item) => `- ${item}`).join("\n")}`;
 }
 
-function renderScripts(payload) {
-  const scripts = angles.map((angle, index) => buildScript(payload, angle, index + 1));
+function renderScripts(payload, reason = "Generated") {
+  const selectedFrameworks = buildFrameworkSet();
+  const scripts = selectedFrameworks.map((framework, index) => buildScript(payload, framework, index + 1));
   list.innerHTML = scripts
     .map(
       (script) => `
       <article class="script-card" data-testid="card-script-${script.index}">
         <div class="card-top">
           <div>
-            <span class="badge">${script.angle}</span>
+            <span class="badge">${escapeHtml(script.angle)}</span>
             <h3>${escapeHtml(script.title)}</h3>
           </div>
           <div class="card-actions">
@@ -213,7 +297,7 @@ function renderScripts(payload) {
     });
   });
 
-  statusEl.textContent = `Generated 3 scripts for "${payload.topic}".`;
+  statusEl.textContent = `${reason} 3 stronger scripts for "${payload.topic}". Variant ${generationRound + 1}.`;
 }
 
 function escapeHtml(value) {
@@ -233,9 +317,9 @@ form.addEventListener("submit", (event) => {
     topicInput.focus();
     return;
   }
-  generationRound = 0;
+  generationRound += 1;
   lastPayload = payload;
-  renderScripts(payload);
+  renderScripts(payload, "Generated");
 });
 
 regenBtn.addEventListener("click", () => {
@@ -247,7 +331,7 @@ regenBtn.addEventListener("click", () => {
   }
   lastPayload = payload.topic ? payload : lastPayload;
   generationRound += 1;
-  renderScripts(lastPayload);
+  renderScripts(lastPayload, "Regenerated");
 });
 
 resetBtn.addEventListener("click", () => {
