@@ -130,6 +130,27 @@ select {
   letter-spacing: -0.02em;
 }
 
+.nav-links,
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nav-links a,
+.footer-links a {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nav-links a:hover,
+.footer-links a:hover {
+  color: var(--text);
+}
+
 .logo {
   width: 42px;
   color: var(--accent);
@@ -443,6 +464,42 @@ textarea {
   padding-block: var(--space-6);
   color: var(--faint);
   font-size: var(--text-sm);
+}
+
+.content-page {
+  width: min(840px, calc(100% - var(--space-8)));
+  margin-inline: auto;
+  padding-block: var(--space-8) var(--space-12);
+}
+
+.content-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  box-shadow: var(--shadow);
+  padding: var(--space-8);
+}
+
+.content-card h1 {
+  margin-bottom: var(--space-5);
+}
+
+.content-card h2 {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-3);
+}
+
+.content-card p,
+.content-card li {
+  color: var(--muted);
+}
+
+.content-card ul {
+  padding-left: var(--space-5);
+}
+
+.content-card a {
+  color: var(--accent);
 }
 
 @media (max-width: 860px) {
