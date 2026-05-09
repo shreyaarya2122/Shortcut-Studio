@@ -542,3 +542,71 @@ textarea {
     transition-duration: 0.01ms !important;
   }
 }
+
+.policy-banner {
+  border: 1px solid color-mix(in oklab, var(--accent-2) 60%, var(--border));
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+  background: color-mix(in oklab, var(--accent-2) 14%, var(--surface));
+  color: var(--text);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.policy-banner-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.policy-banner h3 {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.policy-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  background: var(--accent-2);
+  color: var(--accent-text);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.policy-banner p {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.policy-resource {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-3);
+  color: var(--muted);
+}
+
+.policy-foot {
+  color: var(--faint);
+  font-size: var(--text-xs);
+}
+
+.safety-section {
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--border));
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface-2));
+}
+
+.safety-section h4 {
+  color: var(--accent);
+}
+
+.safety-lede {
+  margin-bottom: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
