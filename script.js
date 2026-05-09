@@ -18,6 +18,8 @@ const POLICY_CATEGORIES = [
     id: "adult",
     label: "Adult / sexual content",
     keywords: ["porn", "pornographic", "xxx", "nude", "nudes", "nudity", "sex tape", "sexual", "onlyfans", "escort", "fetish", "erotic", "strip club", "stripping", "camgirl", "nsfw"],
+    creatorTopic: () => "healthy relationships and online safety",
+    safeAngle: () => "what creators should know to keep audiences safe",
     reframe: (t) => `Healthy relationships and online safety: what creators should know about ${t.replace(/porn(ographic)?|xxx|nude(s)?|nudity|sex tape|sexual content|onlyfans|escort|erotic|nsfw/gi, "this topic").trim() || "this topic"}`,
     note: "Adult or sexualized content is not advertiser-safe and breaks YouTube's nudity and sexual content policy. Reframed as an awareness/education angle for general audiences.",
   },
@@ -25,6 +27,8 @@ const POLICY_CATEGORIES = [
     id: "violence",
     label: "Graphic violence / gore",
     keywords: ["gore", "graphic violence", "behead", "decapitat", "torture", "murder tutorial", "how to kill", "stab someone", "shoot someone", "fight video", "street fight", "blood and gore", "snuff"],
+    creatorTopic: () => "conflict de-escalation and online safety",
+    safeAngle: () => "how creators can cover tense moments without glorifying harm",
     reframe: (t) => `Conflict de-escalation and online safety: a creator-friendly take on ${sanitizeTopic(t)}`,
     note: "Graphic violence is restricted by YouTube's violent or graphic content policy and is not advertiser-friendly. Reframed as a de-escalation and awareness angle.",
   },
@@ -32,6 +36,8 @@ const POLICY_CATEGORIES = [
     id: "selfharm",
     label: "Self-harm / suicide",
     keywords: ["suicide", "kill myself", "kill yourself", "self harm", "self-harm", "cutting myself", "end my life", "ways to die", "how to die", "anorexia tips", "pro ana", "pro-ana", "thinspo"],
+    creatorTopic: () => "mental health awareness",
+    safeAngle: () => "how creators can support viewers and point to real resources",
     reframe: (t) => `Mental health awareness and supportive resources: a sensitive creator angle on ${sanitizeTopic(t)}`,
     note: "Self-harm and suicide content is highly restricted by YouTube. Reframed as a supportive mental-health awareness angle. Includes a help-line reminder for viewers.",
     addSafetyResource: true,
@@ -40,6 +46,8 @@ const POLICY_CATEGORIES = [
     id: "dangerous",
     label: "Dangerous acts / pranks / challenges",
     keywords: ["dangerous prank", "scary prank", "harmful prank", "dangerous challenge", "tide pod", "blackout challenge", "choking challenge", "fire challenge", "car surfing", "train surfing", "rooftop jump", "parkour stunt", "drink bleach", "eat tide", "balcony jump", "dangerous stunt", "risky stunt"],
+    creatorTopic: () => "risky prank trends",
+    safeAngle: () => "why creators should avoid them and what to do instead",
     reframe: (t) => `Why this trend is risky and what creators can do instead: a safe-creator breakdown of ${sanitizeTopic(t)}`,
     note: "Dangerous acts, harmful pranks, and risky challenges violate YouTube's harmful or dangerous content policy. Reframed as a creator-ethics and prevention angle — no operational instructions.",
   },
@@ -47,6 +55,8 @@ const POLICY_CATEGORIES = [
     id: "weapons",
     label: "Weapons / explosives",
     keywords: ["how to make a bomb", "build a bomb", "ied", "pipe bomb", "homemade gun", "ghost gun", "3d print gun", "convert to full auto", "auto sear", "silencer", "suppressor build", "molotov", "explosive", "tnt recipe", "gunpowder recipe", "thermite"],
+    creatorTopic: () => "public safety and policy context",
+    safeAngle: () => "an explainer-style angle without any build instructions",
     reframe: (t) => `Public safety and policy context: an explainer-style creator angle on ${sanitizeTopic(t)}`,
     note: "Instructions for weapons or explosives are restricted by YouTube's firearms and harmful content policies. Reframed as a policy/explainer angle — no build steps.",
   },
@@ -54,6 +64,8 @@ const POLICY_CATEGORIES = [
     id: "hate",
     label: "Hate / harassment / protected classes",
     keywords: ["hate speech", "racial slur", "ethnic slur", "white power", "white supremac", "neo-nazi", "kill all", "subhuman", "deserve to die", "exterminate", "n-word video", "homophobic rant", "transphobic rant", "doxx", "doxxing"],
+    creatorTopic: () => "inclusion and online conduct",
+    safeAngle: () => "a creator-positive angle that punches at ideas, not people",
     reframe: (t) => `Inclusion, respect, and online conduct: a creator-positive angle on ${sanitizeTopic(t)}`,
     note: "Hate speech, harassment, and attacks on protected groups violate YouTube's hate speech and harassment policies. Reframed as an inclusion and online-conduct angle.",
   },
@@ -61,6 +73,8 @@ const POLICY_CATEGORIES = [
     id: "regulated",
     label: "Drugs, tobacco, vaping, firearms, gambling, regulated goods",
     keywords: ["how to get high", "drug recipe", "make meth", "make cocaine", "buy drugs online", "where to buy weed", "vape tricks for kids", "underage vape", "underage drinking", "fake id", "casino hack", "rigged slot", "gambling system", "match fixing"],
+    creatorTopic: () => "regulated-goods awareness",
+    safeAngle: () => "a safer creator coverage angle on risk and regulation",
     reframe: (t) => `Risks, regulation, and safer creator coverage of ${sanitizeTopic(t)}`,
     note: "Regulated goods (drugs, tobacco, firearms sales, gambling systems) are restricted or limited by YouTube and its advertiser-friendly guidelines. Reframed as a regulation/awareness angle.",
   },
@@ -68,6 +82,8 @@ const POLICY_CATEGORIES = [
     id: "scam",
     label: "Scams / dishonest behavior",
     keywords: ["scam tutorial", "phishing tutorial", "carding", "credit card dump", "stolen card", "hack instagram", "hack snapchat", "hack a phone", "free robux generator", "free v-bucks generator", "ponzi", "pyramid scheme tutorial", "fake reviews farm"],
+    creatorTopic: () => "scam-spotting and viewer protection",
+    safeAngle: () => "how creators can help viewers spot and avoid the trap",
     reframe: (t) => `Spotting and avoiding the trap: a viewer-protection angle on ${sanitizeTopic(t)}`,
     note: "Promoting scams, phishing, or dishonest behavior violates YouTube's spam, deceptive practices, and scams policy. Reframed as a scam-spotting / viewer-protection angle.",
   },
@@ -75,6 +91,8 @@ const POLICY_CATEGORIES = [
     id: "medmis",
     label: "Medical or scientific misinformation",
     keywords: ["miracle cure", "cure cancer naturally", "covid hoax", "vaccines cause autism", "anti-vax", "anti vaccine", "essential oils cure", "drink bleach cure", "miracle weight loss", "guaranteed cure"],
+    creatorTopic: () => "evidence-based health framing",
+    safeAngle: () => "a fact-checked angle that cites reputable sources",
     reframe: (t) => `What the evidence actually says: a fact-checked creator angle on ${sanitizeTopic(t)}`,
     note: "Medical or scientific claims that contradict health authorities are restricted by YouTube's medical misinformation policy. Reframed as a fact-check angle citing reputable sources.",
   },
@@ -82,6 +100,8 @@ const POLICY_CATEGORIES = [
     id: "civic",
     label: "Election / civic misinformation",
     keywords: ["election was stolen", "rigged election", "voter fraud proof", "fake ballots", "stop the steal", "the election is fake", "voting machines hacked"],
+    creatorTopic: () => "evidence-based civics",
+    safeAngle: () => "how elections are actually verified, in plain language",
     reframe: (t) => `How elections are actually verified: an evidence-based creator angle on ${sanitizeTopic(t)}`,
     note: "Election integrity claims are tightly governed by YouTube's elections misinformation policy. Reframed as an evidence-based civics explainer.",
   },
@@ -89,6 +109,8 @@ const POLICY_CATEGORIES = [
     id: "tragedy",
     label: "Sensitive tragedies / events",
     keywords: ["mass shooting", "school shooting", "terror attack", "9/11 hoax", "holocaust hoax", "natural disaster jokes", "war atrocity"],
+    creatorTopic: () => "respectful coverage of sensitive events",
+    safeAngle: () => "how creators can inform viewers without sensationalizing",
     reframe: (t) => `Respectful coverage and viewer support: a sensitive creator angle on ${sanitizeTopic(t)}`,
     note: "Sensitive events and tragedies need careful handling under YouTube's violent events and harassment policies, and are limited for advertisers. Reframed for respectful coverage.",
   },
@@ -96,6 +118,8 @@ const POLICY_CATEGORIES = [
     id: "minors",
     label: "Child safety / minors",
     keywords: ["kids in swimsuits", "child model", "minor dating", "kids alone at night", "babysit minor flirt", "underage relationship", "sexualize minor", "loli"],
+    creatorTopic: () => "online safety for kids and parents",
+    safeAngle: () => "a protective angle for parents, with no risky details",
     reframe: (t) => `Online safety for kids and parents: a protective creator angle on ${sanitizeTopic(t)}`,
     note: "Anything that could endanger minors is one of YouTube's strictest policy areas. Reframed entirely as a child-safety / parent-education angle. No identifying or risky details.",
   },
@@ -103,10 +127,36 @@ const POLICY_CATEGORIES = [
     id: "claims",
     label: "Misleading or guaranteed claims",
     keywords: ["guaranteed money", "get rich quick", "guaranteed 10k", "100% guaranteed", "no risk profit", "secret millionaire trick", "instant six pack", "lose 30 pounds in a week", "guaranteed views", "guaranteed subscribers"],
+    creatorTopic: () => "honest creator framing",
+    safeAngle: () => "realistic expectations instead of guaranteed-outcome promises",
     reframe: (t) => `Realistic expectations and honest creator framing of ${sanitizeTopic(t)}`,
     note: "Guaranteed-outcome claims violate YouTube's deceptive practices guidelines and advertiser-friendly rules. Reframed with honest, evidence-based language.",
   },
 ];
+
+const CREATOR_TOPIC_VARIANTS = {
+  dangerous: ["risky prank trends", "unsafe prank content", "dangerous prank trends", "harmful viral challenges"],
+  adult: ["healthy relationships and online safety", "online safety for adult audiences", "respectful relationship content"],
+  violence: ["conflict de-escalation", "online safety around tense moments", "creator-friendly conflict coverage"],
+  selfharm: ["mental health awareness", "supportive mental-health framing", "creator support for tough moments"],
+  weapons: ["public safety and policy context", "policy-explainer framing", "safety-first weapons coverage"],
+  hate: ["inclusion and online conduct", "respectful online conduct", "creator-positive online behavior"],
+  regulated: ["regulated-goods awareness", "risk and regulation framing", "safer coverage of regulated topics"],
+  scam: ["scam-spotting and viewer protection", "viewer-protection framing", "safer money and identity habits"],
+  medmis: ["evidence-based health framing", "fact-checked health angles", "creator-grade health literacy"],
+  civic: ["evidence-based civics", "how elections actually work", "civic-literacy framing"],
+  tragedy: ["respectful coverage of sensitive events", "informed, careful event coverage", "trauma-aware creator framing"],
+  minors: ["online safety for kids and parents", "parent-focused child-safety framing", "protective family-online-safety angles"],
+  claims: ["honest creator framing", "realistic-expectations framing", "evidence-based creator promises"],
+};
+
+function pickCreatorTopic(policyHit) {
+  const variants = CREATOR_TOPIC_VARIANTS[policyHit.category.id];
+  if (variants && variants.length) {
+    return variants[Math.abs(generationRound) % variants.length];
+  }
+  return policyHit.category.creatorTopic ? policyHit.category.creatorTopic() : "this topic";
+}
 
 function sanitizeTopic(t) {
   if (!t) return "this topic";
@@ -127,10 +177,15 @@ function detectPolicyIssue(rawTopic) {
 }
 
 function buildSafePayload(originalPayload, policyHit) {
-  const safeTopic = policyHit.category.reframe(originalPayload.topic);
+  const creatorTopic = pickCreatorTopic(policyHit);
+  const safeAngle = policyHit.category.safeAngle ? policyHit.category.safeAngle() : "a creator-safe angle";
+  const verboseReframe = policyHit.category.reframe(originalPayload.topic);
   return {
     ...originalPayload,
-    topic: safeTopic,
+    topic: creatorTopic,
+    creatorTopic,
+    safeAngle,
+    verboseReframe,
     originalTopic: originalPayload.topic,
     policyHit,
   };
@@ -515,6 +570,7 @@ function pickSafetyChecklist(index) {
 
 function buildScript(payload, framework, index) {
   const topic = payload.topic;
+  const safeAngle = payload.safeAngle || null;
   const moves = categoryMoves[payload.category];
   const tone = toneLines[payload.tone];
   const hookSeed = generationRound * 31 + index * 17;
@@ -547,6 +603,20 @@ function buildScript(payload, framework, index) {
   const scoreReason = pick(viralScoreReasons, index + 5);
   const safety = pickSafetyChecklist(index);
 
+  const proofLine = safeAngle
+    ? `${moves.proof} Frame it around ${safeAngle}, not the harmful act itself.`
+    : `${moves.proof} Keep each visual under three seconds.`;
+  const tipsList = [
+    paceLine(payload.pace),
+    moves.visual,
+    moves.value,
+    framework.angle,
+    `Viral score: ${score}/100 — ${scoreReason}`,
+  ];
+  if (safeAngle) {
+    tipsList.splice(2, 0, `Lead with ${safeAngle} — awareness, prevention, and creator ethics over shock value.`);
+  }
+
   return {
     title: `${framework.label}: ${topic}`,
     angle: framework.name,
@@ -555,7 +625,7 @@ function buildScript(payload, framework, index) {
       `0-3s: Say: "${hook}" Show motion immediately. On-screen text: "${screenText}".`,
       `4-9s: Name the audience reality: "${problem}"`,
       `10-18s: Set the loop — "${toneA}." ${loop}`,
-      `19-31s: Drop proof: ${moves.proof} Keep each visual under three seconds.`,
+      `19-31s: Drop proof: ${proofLine}`,
       `32-44s: Land the useful method: ${payoff}`,
       `45-54s: Payoff line: "${toneB}." ${editor}`,
       `55-60s: Engagement close: "${prompt}" Hold the final caption long enough to screenshot.`,
@@ -567,13 +637,7 @@ function buildScript(payload, framework, index) {
       prompt,
     ],
     cta: prompt,
-    tips: [
-      paceLine(payload.pace),
-      moves.visual,
-      moves.value,
-      framework.angle,
-      `Viral score: ${score}/100 — ${scoreReason}`,
-    ],
+    tips: tipsList,
     retention: tacticSet,
     safety,
     framework: framework.name,
@@ -659,7 +723,8 @@ function renderScripts(payload, reason = "Generated", policyHit = null, original
     scripts.forEach((script) => usedScriptSignatures.add(`${script.title}|${script.hook}|${script.beats.join("|")}|${script.cta}`));
   }
 
-  const banner = policyHit ? renderPolicyBanner(policyHit, originalTopic, payload.topic) : "";
+  const bannerReframe = policyHit ? (payload.verboseReframe || payload.topic) : "";
+  const banner = policyHit ? renderPolicyBanner(policyHit, originalTopic, bannerReframe) : "";
 
   list.innerHTML = banner + scripts
     .map(
