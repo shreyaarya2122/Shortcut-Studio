@@ -167,16 +167,13 @@ function paceLine(pace) {
   return "Use fast cuts every 1.5-2 seconds with captions, zooms, and b-roll resets.";
 }
 
-function shuffle(items) {
-  return [...items].sort(() => Math.random() - 0.5);
-}
-
 function pick(items, offset = 0) {
-  return items[(generationRound + offset + Math.floor(Math.random() * items.length)) % items.length];
+  return items[(generationRound + offset) % items.length];
 }
 
 function buildFrameworkSet() {
-  return shuffle(frameworkLibrary).slice(0, 3);
+  const start = generationRound % frameworkLibrary.length;
+  return [0, 2, 4].map((step) => frameworkLibrary[(start + step) % frameworkLibrary.length]);
 }
 
 function buildScript(payload, framework, index) {
@@ -186,7 +183,8 @@ function buildScript(payload, framework, index) {
   const hook = pick(framework.hooks, index)(topic);
   const prompt = pick(framework.close, index);
   const screenText = pick(textTemplates, index)(topic);
-  const tacticSet = shuffle(retentionTactics).slice(0, 3);
+  const tacticStart = (generationRound + index) % retentionTactics.length;
+  const tacticSet = [0, 1, 2].map((step) => retentionTactics[(tacticStart + step) % retentionTactics.length]);
   const toneA = pick(tone, index);
   const toneB = pick(tone, index + 1);
 
