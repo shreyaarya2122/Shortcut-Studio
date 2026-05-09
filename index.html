@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShortCut Studio - Viral YouTube Shorts Script Generator for Creators</title>
+    <meta
+      name="description"
+      content="Generate three optimized 60-second YouTube Shorts scripts with hooks, beats, engagement prompts, CTAs, and trending style tips."
+    />
+    <meta property="og:title" content="ShortCut Studio - Shorts Script Generator" />
+    <meta
+      property="og:description"
+      content="Turn any topic into three short-form video scripts built for retention, comments, and fast editing."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://your-domain.com/" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to generator</a>
+    <header class="site-header">
+      <div class="brand" aria-label="ShortCut Studio">
+        <svg class="logo" viewBox="0 0 42 42" role="img" aria-label="ShortCut Studio logo">
+          <path d="M8 7h20c4.4 0 8 3.6 8 8v12c0 4.4-3.6 8-8 8H14c-4.4 0-8-3.6-8-8V9c0-1.1.9-2 2-2Z" />
+          <path d="M18 15v12l10-6-10-6Z" />
+          <path d="M6 17h8M6 25h8" />
+        </svg>
+        <span>ShortCut Studio</span>
+      </div>
+      <button class="theme-toggle" type="button" data-theme-toggle data-testid="button-theme" aria-label="Switch theme">
+        Light
+      </button>
+    </header>
+
+    <main id="main" class="shell">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">60-second YouTube Shorts generator</p>
+          <h1 id="hero-title">Turn one idea into three retention-ready Shorts scripts.</h1>
+          <p class="lede">
+            Built around patterns common in high-performing entertainment and education Shorts:
+            fast context, open loops, pattern interrupts, comment triggers, and a clear visual edit map.
+          </p>
+        </div>
+        <aside class="framework-card" aria-label="Viral framework">
+          <span class="metric">3x</span>
+          <p>Every generation gives you three angles: shock, story, and lesson.</p>
+          <ul>
+            <li>Hook in the first 3 seconds</li>
+            <li>Beat map for 0-60 seconds</li>
+            <li>CTA and style notes included</li>
+          </ul>
+        </aside>
+      </section>
+
+      <aside class="ad-slot" aria-label="Advertisement placement" data-testid="ad-slot-top">
+        <span>Ad placement</span>
+        <p>Leaderboard slot ready for your AdSense or ad network code.</p>
+      </aside>
+
+      <section class="generator-grid" aria-label="Script generator">
+        <form class="panel input-panel" id="generator-form">
+          <div class="field">
+            <label for="topic">Topic</label>
+            <textarea
+              id="topic"
+              name="topic"
+              data-testid="input-topic"
+              rows="4"
+              placeholder="Example: The hidden psychology behind cliffhanger endings"
+              required
+            ></textarea>
+          </div>
+
+          <div class="controls">
+            <div class="field">
+              <label for="category">Content lane</label>
+              <select id="category" name="category" data-testid="select-category">
+                <option value="education">Education</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="hybrid" selected>Entertainment + education</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="audience">Audience</label>
+              <input id="audience" name="audience" data-testid="input-audience" value="curious viewers" />
+            </div>
+            <div class="field">
+              <label for="tone">Tone</label>
+              <select id="tone" name="tone" data-testid="select-tone">
+                <option value="curious">Curious</option>
+                <option value="dramatic">Dramatic</option>
+                <option value="funny">Funny</option>
+                <option value="coach">Creator coach</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pace">Pacing</label>
+              <select id="pace" name="pace" data-testid="select-pace">
+                <option value="fast" selected>Fast cuts</option>
+                <option value="balanced">Balanced</option>
+                <option value="story">Story-driven</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit" data-testid="button-generate">Generate 3 scripts</button>
+            <button class="secondary" type="button" id="reset" data-testid="button-reset">Reset</button>
+          </div>
+          <p class="microcopy" id="status" data-testid="status-generator">
+            Enter a topic to create three 60-second scripts with hooks, prompts, and editing notes.
+          </p>
+        </form>
+
+        <aside class="panel playbook">
+          <h2>Viral short-form playbook</h2>
+          <div class="playbook-row">
+            <strong>0-3s</strong>
+            <span>Make a promise, reveal a contradiction, or ask a loaded question.</span>
+          </div>
+          <div class="playbook-row">
+            <strong>4-35s</strong>
+            <span>Stack proof, story beats, or examples with a visual change every 2-3 seconds.</span>
+          </div>
+          <div class="playbook-row">
+            <strong>36-55s</strong>
+            <span>Deliver the payoff, then open a second loop for comments or shares.</span>
+          </div>
+          <div class="playbook-row">
+            <strong>56-60s</strong>
+            <span>Ask a low-friction question that viewers can answer in one sentence.</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="results" aria-live="polite" aria-labelledby="results-title">
+        <div class="results-heading">
+          <div>
+            <p class="eyebrow">Generated output</p>
+            <h2 id="results-title">Three Shorts scripts</h2>
+          </div>
+          <button class="secondary small" type="button" id="regenerate" data-testid="button-regenerate">Regenerate</button>
+        </div>
+        <div id="script-list" class="script-list" data-testid="list-scripts">
+          <article class="empty-state">
+            <h3>Your scripts will appear here.</h3>
+            <p>Try a topic with a clear curiosity gap, surprising fact, or transformation promise.</p>
+          </article>
+        </div>
+      </section>
+
+      <aside class="ad-slot compact" aria-label="Advertisement placement" data-testid="ad-slot-bottom">
+        <span>Monetization-ready</span>
+        <p>Replace this placeholder with your approved ad unit after connecting a domain and ad account.</p>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <span>ShortCut Studio</span>
+      <span>Framework: hook, loop, payoff, prompt.</span>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
