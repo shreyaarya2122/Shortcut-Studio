@@ -8,6 +8,9 @@ const themeBtn = document.querySelector("[data-theme-toggle]");
 
 let lastPayload = null;
 let generationRound = 0;
+const usedScriptSignatures = new Set();
+const usedHooks = new Set();
+const usedPrompts = new Set();
 
 const frameworkLibrary = [
   {
@@ -127,6 +130,92 @@ const categoryMoves = {
   },
 };
 
+const audienceProblems = [
+  (audience) => `${audience} scroll when the first line sounds like an intro instead of a payoff.`,
+  (audience) => `${audience} do not need more context first; they need a reason to care first.`,
+  (audience) => `${audience} stay longer when the video shows the result before the explanation.`,
+  (audience) => `${audience} lose interest when the example arrives too late.`,
+  (audience) => `${audience} respond when the video gives them a simple opinion to agree or fight with.`,
+  (audience) => `${audience} save videos that turn a confusing idea into a repeatable move.`,
+];
+
+const loopSetups = [
+  "Show the wrong version first, but do not explain the fix yet.",
+  "Put a blurred or cropped result on screen and promise to reveal why it worked.",
+  "Ask a yes/no question viewers can answer silently while watching.",
+  "Show two options and hint that the weaker-looking one performs better.",
+  "Make the viewer choose a side before you reveal the lesson.",
+  "Start a countdown: three things to remove, two things to keep, one thing to copy.",
+];
+
+const payoffMoves = [
+  "Turn the lesson into a one-line rule the viewer can remember.",
+  "Show the improved version next to the weak version for instant contrast.",
+  "Reveal the hidden edit, phrase, or order that changed the result.",
+  "Give viewers a copyable mini-template they can use after the video.",
+  "Summarize the transformation in a single caption: before, switch, after.",
+  "End with a practical test viewers can run on their next Short.",
+];
+
+const editorDirections = [
+  "Use a jump cut on every claim, then slow down for the reveal.",
+  "Punch in by 8-12% when the contradiction appears.",
+  "Put the strongest noun in yellow or accent color for one second.",
+  "Use a swipe transition only when moving from mistake to fix.",
+  "Show receipts: screen recording, quick sketch, search result, or side-by-side frame.",
+  "Keep the final CTA card clean with only one question on screen.",
+];
+
+const viralScoreReasons = [
+  "Strong curiosity gap, fast payoff, and a comment-friendly ending.",
+  "Clear before/after contrast with high save potential.",
+  "Debatable framing that can attract comments without feeling clickbait.",
+  "Practical framework that makes viewers feel smarter in under a minute.",
+  "Story-led opening that creates a reason to stay until the reveal.",
+  "High replay value because the viewer can copy the structure.",
+];
+
+const hookDifferentiators = [
+  "The fix is the order, not the tool.",
+  "The first three seconds decide whether it survives.",
+  "The secret is showing proof before explanation.",
+  "The viewer needs the result before the lecture.",
+  "The simplest version usually wins.",
+  "The edit matters as much as the idea.",
+  "The wrong opening makes even a good idea feel boring.",
+  "The shareable part must arrive before the halfway mark.",
+  "The comment trigger needs to be built into the setup.",
+  "The best version feels useful and slightly debatable.",
+  "The payoff should feel screenshot-worthy.",
+  "The hook should make the viewer choose a side.",
+];
+
+const promptDifferentiators = [
+  "Ask them to answer with one word.",
+  "Ask them to pick side A or side B.",
+  "Ask them what they would test next.",
+  "Ask them to comment their niche.",
+  "Ask them which step they would steal.",
+  "Ask them what part deserves a deeper breakdown.",
+  "Ask them whether they agree or disagree.",
+  "Ask them to save it as a checklist.",
+  "Ask them to tag a creator who needs it.",
+  "Ask them to vote for the next topic.",
+];
+
+const payoffFocus = [
+  "make the first line impossible to ignore",
+  "show the result before the explanation",
+  "turn the idea into a repeatable shortcut",
+  "make viewers compare two choices",
+  "create a clean before-and-after moment",
+  "give the viewer a reason to comment",
+  "make the middle of the video feel like a reveal",
+  "turn the takeaway into a save-worthy checklist",
+  "make the edit pattern carry the idea",
+  "end with a question people can answer instantly",
+];
+
 const retentionTactics = [
   "Start with the result or mistake before any intro.",
   "Put the most clickable phrase on screen in the first second.",
@@ -168,7 +257,11 @@ function paceLine(pace) {
 }
 
 function pick(items, offset = 0) {
-  return items[(generationRound + offset) % items.length];
+  return items[Math.abs(generationRound * 7 + offset * 11) % items.length];
+}
+
+function pickBySeed(items, seed) {
+  return items[Math.abs(seed) % items.length];
 }
 
 function buildFrameworkSet() {
@@ -180,13 +273,32 @@ function buildScript(payload, framework, index) {
   const topic = payload.topic;
   const moves = categoryMoves[payload.category];
   const tone = toneLines[payload.tone];
-  const hook = pick(framework.hooks, index)(topic);
-  const prompt = pick(framework.close, index);
+  const hookSeed = generationRound * 31 + index * 17;
+  let hook = `${pick(framework.hooks, index)(topic)} Use it to ${pickBySeed(payoffFocus, hookSeed)}.`;
+  let hookSafety = 0;
+  while (usedHooks.has(hook) && hookSafety < framework.hooks.length * hookDifferentiators.length * payoffFocus.length) {
+    hook = `${pick(framework.hooks, index + hookSafety + 1)(topic)} ${pickBySeed(hookDifferentiators, hookSeed + hookSafety)} Use it to ${pickBySeed(payoffFocus, hookSeed + hookSafety + 3)}.`;
+    hookSafety += 1;
+  }
+  usedHooks.add(hook);
+  let prompt = `${pick(framework.close, index)} ${pick(promptDifferentiators, index)}`;
+  let promptSafety = 0;
+  while (usedPrompts.has(prompt) && promptSafety < framework.close.length * promptDifferentiators.length) {
+    prompt = `${pick(framework.close, index + promptSafety + 1)} ${pickBySeed(promptDifferentiators, generationRound * 19 + index * 13 + promptSafety)}`;
+    promptSafety += 1;
+  }
+  usedPrompts.add(prompt);
   const screenText = pick(textTemplates, index)(topic);
   const tacticStart = (generationRound + index) % retentionTactics.length;
   const tacticSet = [0, 1, 2].map((step) => retentionTactics[(tacticStart + step) % retentionTactics.length]);
   const toneA = pick(tone, index);
   const toneB = pick(tone, index + 1);
+  const problem = pick(audienceProblems, index)(payload.audience);
+  const loop = pick(loopSetups, index + 2);
+  const payoff = pick(payoffMoves, index + 3);
+  const editor = pick(editorDirections, index + 4);
+  const score = 86 + ((generationRound * 5 + index * 3) % 12);
+  const scoreReason = pick(viralScoreReasons, index + 5);
 
   return {
     title: `${framework.label}: ${topic}`,
@@ -194,11 +306,11 @@ function buildScript(payload, framework, index) {
     hook,
     beats: [
       `0-3s: Say: "${hook}" Show movement immediately. On-screen text: "${screenText}".`,
-      `4-9s: Name the audience problem: "${payload.audience} usually lose time here because the first step is unclear."`,
-      `10-18s: Set the loop: "${toneA}." Show the weak version, wrong assumption, or confusing example.`,
+      `4-9s: Name the audience problem: "${problem}"`,
+      `10-18s: Set the loop: "${toneA}." ${loop}`,
       `19-31s: Give proof: ${moves.proof} Keep each visual under three seconds.`,
-      `32-44s: Deliver the useful method: explain the one rule, three steps, or before/after change viewers can copy.`,
-      `45-54s: Payoff: "${toneB}." Show the improved result or the clearer version on screen.`,
+      `32-44s: Deliver the useful method: ${payoff}`,
+      `45-54s: Payoff: "${toneB}." ${editor}`,
       `55-60s: Engagement close: "${prompt}" Hold the final caption so viewers can read it.`,
     ],
     onScreen: [
@@ -213,6 +325,7 @@ function buildScript(payload, framework, index) {
       moves.visual,
       moves.value,
       framework.angle,
+      `Viral score: ${score}/100 — ${scoreReason}`,
     ],
     retention: tacticSet,
     index,
@@ -243,8 +356,33 @@ ${script.retention.map((item) => `- ${item}`).join("\n")}`;
 }
 
 function renderScripts(payload, reason = "Generated") {
-  const selectedFrameworks = buildFrameworkSet();
-  const scripts = selectedFrameworks.map((framework, index) => buildScript(payload, framework, index + 1));
+  let scripts = [];
+  let safety = 0;
+  while (scripts.length < 3 && safety < 30) {
+    const selectedFrameworks = buildFrameworkSet();
+    const candidates = selectedFrameworks.map((framework, index) => buildScript(payload, framework, index + 1));
+    candidates.forEach((candidate) => {
+      const signature = `${candidate.title}|${candidate.hook}|${candidate.beats.join("|")}|${candidate.cta}`;
+      if (!usedScriptSignatures.has(signature) && scripts.length < 3) {
+        usedScriptSignatures.add(signature);
+        scripts.push(candidate);
+      }
+    });
+    if (scripts.length < 3) {
+      generationRound += 1;
+    }
+    safety += 1;
+  }
+
+  if (scripts.length < 3) {
+    usedScriptSignatures.clear();
+    usedHooks.clear();
+    usedPrompts.clear();
+    const selectedFrameworks = buildFrameworkSet();
+    scripts = selectedFrameworks.map((framework, index) => buildScript(payload, framework, index + 1));
+    scripts.forEach((script) => usedScriptSignatures.add(`${script.title}|${script.hook}|${script.beats.join("|")}|${script.cta}`));
+  }
+
   list.innerHTML = scripts
     .map(
       (script) => `
@@ -338,6 +476,9 @@ resetBtn.addEventListener("click", () => {
   document.querySelector("#audience").value = "curious viewers";
   lastPayload = null;
   generationRound = 0;
+  usedScriptSignatures.clear();
+  usedHooks.clear();
+  usedPrompts.clear();
   list.innerHTML = `<article class="empty-state"><h3>Your scripts will appear here.</h3><p>Try a topic with a clear curiosity gap, surprising fact, or transformation promise.</p></article>`;
   statusEl.textContent = "Enter a topic to create three 60-second scripts with hooks, prompts, and editing notes.";
 });
