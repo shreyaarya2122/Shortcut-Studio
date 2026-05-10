@@ -472,6 +472,49 @@ textarea {
   padding-block: var(--space-8) var(--space-12);
 }
 
+.seo-section {
+  margin-block: var(--space-10);
+  padding: var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.seo-section h2 {
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.seo-section h3 {
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.seo-section p,
+.seo-section li {
+  color: var(--muted);
+}
+
+.seo-section ol,
+.seo-section ul.seo-list {
+  margin-top: var(--space-3);
+  padding-left: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.seo-section a {
+  color: var(--accent);
+}
+
+.seo-section .faq h3 + p {
+  margin-bottom: var(--space-3);
+}
+
 .content-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
